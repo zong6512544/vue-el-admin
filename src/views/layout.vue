@@ -2,7 +2,7 @@
  * @Author: zongbao.yao
  * @Date: 2020-07-30 12:50:13
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-08-02 00:54:17
+ * @LastEditTime: 2020-08-02 01:28:47
  * @Description: 
 --> 
 <template>
@@ -53,7 +53,16 @@
         <!-- 侧边栏aside -->
         <el-aside width="200px">
           <!-- el-menu -->
-          <el-menu default-active="1" @select="slideSelect">
+          <el-menu default-active="0" @select="slideSelect">
+            <el-menu-item
+              :index="index | numToString"
+              v-for="(item,index) in slideMenus"
+              :key="index"
+            >
+              <i :class="item.icon"></i>
+              <span slot="title">{{item.name}}</span>
+            </el-menu-item>
+            <!-- 
             <el-menu-item index="1">
               <i class="el-icon-menu"></i>
               <span slot="title">导航二</span>
@@ -66,6 +75,7 @@
               <i class="el-icon-setting"></i>
               <span slot="title">导航四</span>
             </el-menu-item>
+            -->
           </el-menu>
         </el-aside>
         <!-- 主布局main -->
@@ -80,7 +90,7 @@
 </template>
 
 <script>
-import common from '@/common/mixins/common.js'
+import common from "@/common/mixins/common.js";
 export default {
   name: "layout",
 
@@ -105,8 +115,34 @@ export default {
       navBar: {
         active: "0", // el-menu菜单栏选中index
         list: [
-          { name: "首页" },
-          { name: "商品" },
+          // heade对应的菜单栏
+          {
+            name: "首页",
+            subActive: "0",
+            // heade对应的菜单栏下，渲染对应的侧边栏list
+            subMenu: [
+              {
+                icon: "el-icon-s-home",
+                name: "后台首页",
+              },
+              {
+                icon: "el-icon-s-claim",
+                name: "商品列表",
+              }
+            ],
+          },
+          // heade对应的菜单栏
+          {
+            name: "商品",
+            subActive: "0",
+            // heade对应的菜单栏下，渲染对应的侧边栏list
+            subMenu: [
+              {
+                icon: "el-icon-s-claim",
+                name: "商品列表",
+              },
+            ],
+          },
           { name: "订单" },
           { name: "会员" },
           { name: "设置" },
@@ -115,7 +151,26 @@ export default {
     };
   },
 
-  computed: {},
+  computed: {
+    // 渲染侧边菜单栏
+    slideMenus() {
+      return this.navBar.list[this.navBar.active].subMenu || [];
+    },
+    // 侧边栏选中状态
+    // case01:
+    // slideMenuActive() {
+    //   return this.navBar.list[this.navBar.active].subActive || 0;
+    // },
+    // case02:优化
+    slideMenuActive: {
+      get() {
+        return this.navBar.list[this.navBar.active].subActive || 0;
+      },
+      set(val) {
+        this.navBar.list[this.navBar.active].subActive = val;
+      },
+    },
+  },
 
   watch: {},
 
@@ -125,10 +180,17 @@ export default {
     // el-menu选中触发事件
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+      this.navBar.active = key;
     },
     // el-menu侧边栏
     slideSelect(index, indexPath) {
       console.log(index, indexPath);
+      // 侧边栏选中
+      // case01:
+      // this.navBar.list[this.navBar.active].subActive = index;
+
+      // case02:优化
+      this.slideMenuActive = index;
     },
   },
 };
