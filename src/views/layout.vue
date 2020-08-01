@@ -2,14 +2,54 @@
  * @Author: zongbao.yao
  * @Date: 2020-07-30 12:50:13
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-07-30 13:05:10
+ * @LastEditTime: 2020-08-02 00:11:40
  * @Description: 
 --> 
 <template>
   <div class="layout">
-    主布局
+    <!-- el-布局容器 -->
+    <el-container class="outer-container">
+      <!-- 头部header -->
+      <el-header class="d-flex align-items-center container-header">
+        <!-- logo -->
+        <a class="h5 text-light mb-0 mr-auto">UNI-ADMIN</a>
+        <!-- el-menu菜单栏 -->
+        <el-menu
+          :default-active="navBarIndex"
+          class="el-menu-demo"
+          mode="horizontal"
+          @select="handleSelect"
+          background-color="#545c64"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+        >
+          <el-menu-item index="1">首页</el-menu-item>
+          <el-menu-item index="2">商品</el-menu-item>
+          <el-menu-item index="3">订单</el-menu-item>
+          <el-menu-item index="4">会员</el-menu-item>
+          <el-menu-item index="5">设置</el-menu-item>
+          <!-- 级联关系 -->
+          <el-submenu index="100">
+            <template slot="title">
+              <el-avatar size="small" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
+              sumer
+            </template>
+            <el-menu-item index="100-1">修改</el-menu-item>
+            <el-menu-item index="100-2">退出</el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </el-header>
+      <el-container class="inner-container">
+        <!-- 侧边栏aside -->
+        <el-aside width="200px"></el-aside>
+        <!-- 主布局main -->
+        <el-main>
+          <li v-for="i in 100" :key="i">{{i}}</li>
+        </el-main>
+      </el-container>
+    </el-container>
     <!-- 路由出口 -->
-    <router-view></router-view>
+    <!-- <router-view></router-view> -->
   </div>
 </template>
 
@@ -26,7 +66,10 @@ export default {
   props: {},
 
   data() {
-    return {};
+    return {
+      // el-menu菜单栏选中index
+      navBarIndex: "1",
+    };
   },
 
   computed: {},
@@ -35,9 +78,35 @@ export default {
 
   mounted() {},
 
-  methods: {},
+  methods: {
+    // el-menu选中触发事件
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+.outer-container {
+  // *********************************************控制容器全屏展示*********************************************
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  // 超出隐藏
+  overflow: hidden;
+
+  // header
+  .container-header {
+    background-color: rgb(84, 92, 100);
+  }
+
+  // header下方容器
+  .inner-container {
+    height: 100%;
+    padding-bottom: 60px;
+  }
+}
 </style>
