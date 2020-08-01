@@ -2,7 +2,7 @@
  * @Author: zongbao.yao
  * @Date: 2020-07-30 12:50:13
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-08-02 00:11:40
+ * @LastEditTime: 2020-08-02 00:54:17
  * @Description: 
 --> 
 <template>
@@ -15,7 +15,7 @@
         <a class="h5 text-light mb-0 mr-auto">UNI-ADMIN</a>
         <!-- el-menu菜单栏 -->
         <el-menu
-          :default-active="navBarIndex"
+          :default-active="navBar.active"
           class="el-menu-demo"
           mode="horizontal"
           @select="handleSelect"
@@ -23,16 +23,26 @@
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <el-menu-item index="1">首页</el-menu-item>
-          <el-menu-item index="2">商品</el-menu-item>
-          <el-menu-item index="3">订单</el-menu-item>
-          <el-menu-item index="4">会员</el-menu-item>
-          <el-menu-item index="5">设置</el-menu-item>
+          <!-- 
+            <el-menu-item index="1">首页</el-menu-item>
+            <el-menu-item index="2">商品</el-menu-item>
+            <el-menu-item index="3">订单</el-menu-item>
+            <el-menu-item index="4">会员</el-menu-item>
+            <el-menu-item index="5">设置</el-menu-item>
+          -->
+          <el-menu-item
+            :index="index | numToString"
+            v-for="(item,index) in navBar.list"
+            :key="index"
+          >{{item.name}}</el-menu-item>
+
           <!-- 级联关系 -->
           <el-submenu index="100">
             <template slot="title">
-              <el-avatar size="small" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>
-              sumer
+              <el-avatar
+                size="small"
+                src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+              ></el-avatar>sumer
             </template>
             <el-menu-item index="100-1">修改</el-menu-item>
             <el-menu-item index="100-2">退出</el-menu-item>
@@ -41,7 +51,23 @@
       </el-header>
       <el-container class="inner-container">
         <!-- 侧边栏aside -->
-        <el-aside width="200px"></el-aside>
+        <el-aside width="200px">
+          <!-- el-menu -->
+          <el-menu default-active="1" @select="slideSelect">
+            <el-menu-item index="1">
+              <i class="el-icon-menu"></i>
+              <span slot="title">导航二</span>
+            </el-menu-item>
+            <el-menu-item index="2">
+              <i class="el-icon-document"></i>
+              <span slot="title">导航三</span>
+            </el-menu-item>
+            <el-menu-item index="3">
+              <i class="el-icon-setting"></i>
+              <span slot="title">导航四</span>
+            </el-menu-item>
+          </el-menu>
+        </el-aside>
         <!-- 主布局main -->
         <el-main>
           <li v-for="i in 100" :key="i">{{i}}</li>
@@ -54,21 +80,38 @@
 </template>
 
 <script>
+import common from '@/common/mixins/common.js'
 export default {
   name: "layout",
 
   components: {},
 
-  filters: {},
+  filters: {
+    // PS:mixins混入
+    // 数组转字符串
+    // 此处为了el-menu导航栏的index填充时转换为string
+    // numToString(value) {
+    //   return value.toString();
+    // }
+  },
 
-  mixins: [],
+  // PS:混入公共方法
+  mixins: [common],
 
   props: {},
 
   data() {
     return {
-      // el-menu菜单栏选中index
-      navBarIndex: "1",
+      navBar: {
+        active: "0", // el-menu菜单栏选中index
+        list: [
+          { name: "首页" },
+          { name: "商品" },
+          { name: "订单" },
+          { name: "会员" },
+          { name: "设置" },
+        ],
+      },
     };
   },
 
@@ -82,6 +125,10 @@ export default {
     // el-menu选中触发事件
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    // el-menu侧边栏
+    slideSelect(index, indexPath) {
+      console.log(index, indexPath);
     },
   },
 };
