@@ -2,7 +2,7 @@
  * @Author: zongbao.yao
  * @Date: 2020-07-30 12:50:13
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-08-02 01:28:47
+ * @LastEditTime: 2020-08-02 01:42:51
  * @Description: 
 --> 
 <template>
@@ -12,7 +12,10 @@
       <!-- 头部header -->
       <el-header class="d-flex align-items-center container-header">
         <!-- logo -->
-        <a class="h5 text-light mb-0 mr-auto">UNI-ADMIN</a>
+        <a class="h5 text-light mb-0 mr-auto">
+          <!-- 引入全局配置中的logo文字信息 -->
+          {{$conf.logo}}
+        </a>
         <!-- el-menu菜单栏 -->
         <el-menu
           :default-active="navBar.active"
@@ -112,42 +115,44 @@ export default {
 
   data() {
     return {
-      navBar: {
-        active: "0", // el-menu菜单栏选中index
-        list: [
-          // heade对应的菜单栏
-          {
-            name: "首页",
-            subActive: "0",
-            // heade对应的菜单栏下，渲染对应的侧边栏list
-            subMenu: [
-              {
-                icon: "el-icon-s-home",
-                name: "后台首页",
-              },
-              {
-                icon: "el-icon-s-claim",
-                name: "商品列表",
-              }
-            ],
-          },
-          // heade对应的菜单栏
-          {
-            name: "商品",
-            subActive: "0",
-            // heade对应的菜单栏下，渲染对应的侧边栏list
-            subMenu: [
-              {
-                icon: "el-icon-s-claim",
-                name: "商品列表",
-              },
-            ],
-          },
-          { name: "订单" },
-          { name: "会员" },
-          { name: "设置" },
-        ],
-      },
+      // 所有导航栏配置抽取到全局配置，方便后期维护
+      navBar: [],
+      //   navBar: {
+      //     active: "0", // el-menu菜单栏选中index
+      //     list: [
+      //       // heade对应的菜单栏
+      //       {
+      //         name: "首页",
+      //         subActive: "0",
+      //         // heade对应的菜单栏下，渲染对应的侧边栏list
+      //         subMenu: [
+      //           {
+      //             icon: "el-icon-s-home",
+      //             name: "后台首页",
+      //           },
+      //           {
+      //             icon: "el-icon-s-claim",
+      //             name: "商品列表",
+      //           }
+      //         ],
+      //       },
+      //       // heade对应的菜单栏
+      //       {
+      //         name: "商品",
+      //         subActive: "0",
+      //         // heade对应的菜单栏下，渲染对应的侧边栏list
+      //         subMenu: [
+      //           {
+      //             icon: "el-icon-s-claim",
+      //             name: "商品列表",
+      //           },
+      //         ],
+      //       },
+      //       { name: "订单" },
+      //       { name: "会员" },
+      //       { name: "设置" },
+      //     ],
+      //   },
     };
   },
 
@@ -173,6 +178,11 @@ export default {
   },
 
   watch: {},
+
+  created(){
+    // 初始化菜单栏配置，从全局配置读取
+    this.navBar = this.$conf.navBar
+  },
 
   mounted() {},
 

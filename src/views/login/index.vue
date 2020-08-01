@@ -2,7 +2,7 @@
  * @Author: zongbao.yao
  * @Date: 2020-07-30 13:00:10
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-08-01 21:52:45
+ * @LastEditTime: 2020-08-02 01:39:54
  * @Description: 
 --> 
 <template>
@@ -13,7 +13,10 @@
         <div class="col-12 col-sm-9 col-md-7 col-lg-4 m-auto pt-5 login-box">
           <div class="card mt-5">
             <div class="card-header bg-white">
-              <h3 class="text-center mb-0 text-secondary">UNI-ADMIN</h3>
+              <h3 class="text-center mb-0 text-secondary">
+                <!-- 引入全局配置中的logo文字信息 -->
+                {{$conf.logo}}
+              </h3>
             </div>
             <div class="card-body">
               <!-- :rules-即绑定的验证规则对象 -->
