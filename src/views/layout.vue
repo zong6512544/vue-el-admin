@@ -2,7 +2,7 @@
  * @Author: zongbao.yao
  * @Date: 2020-07-30 12:50:13
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-08-02 02:52:36
+ * @LastEditTime: 2020-08-02 03:46:38
  * @Description: 
 --> 
 <template>
@@ -16,7 +16,7 @@
           <!-- 引入全局配置中的logo文字信息 -->
           {{$conf.logo}}
         </a>
-        <!-- el-menu菜单栏 -->
+        <!-- el-menu顶部菜单栏 -->
         <el-menu
           :default-active="navBar.active"
           class="el-menu-demo"
@@ -55,7 +55,7 @@
       <el-container class="inner-container">
         <!-- 侧边栏aside -->
         <el-aside width="200px">
-          <!-- el-menu -->
+          <!-- el-menu侧边导航栏 -->
           <el-menu :default-active="slideMenuActive" @select="slideSelect" class="el-menu-aside">
             <el-menu-item
               :index="index | numToString"
@@ -169,11 +169,11 @@ export default {
   },
 
   computed: {
-    // 渲染侧边菜单栏
+    // 根据header菜单栏的index改变，渲染不同的侧边栏数据（navBar-list-subMenu）
     slideMenus() {
       return this.navBar.list[this.navBar.active].subMenu || [];
     },
-    // 侧边栏选中状态
+    // 侧边栏subMenu选中状态
     // case01:
     // slideMenuActive() {
     //   return this.navBar.list[this.navBar.active].subActive || '0';
@@ -183,6 +183,7 @@ export default {
       get() {
         return this.navBar.list[this.navBar.active].subActive || "0";
       },
+      // 根据传入的值，去设置侧边导航栏选中的index下标
       set(val) {
         this.navBar.list[this.navBar.active].subActive = val;
       },
@@ -191,7 +192,7 @@ export default {
 
   watch: {
     // 监听路由
-    "$route"(to, from) {
+    $route(to, from) {
       // 本地存储
       localStorage.setItem(
         "navActive",
@@ -218,8 +219,10 @@ export default {
   mounted() {},
 
   methods: {
-    // el-menu选中触发事件
+    // el-menu顶部菜单选中
     handleSelect(key, keyPath) {
+      console.log("top", key, keyPath);
+      // 头部导航栏点击的index
       this.navBar.active = key;
       // 初始化侧边导航栏
       this.slideMenuActive = "0";
@@ -231,9 +234,8 @@ export default {
         });
       }
     },
-    // el-menu侧边栏
+    // el-menu侧边栏菜单选中
     slideSelect(index, indexPath) {
-      console.log(index, indexPath);
       // 侧边栏选中
       // case01:
       // this.navBar.list[this.navBar.active].subActive = index;
@@ -269,7 +271,6 @@ export default {
       let r = localStorage.getItem("navActive");
       if (r) {
         r = JSON.parse(r);
-        console.log(r);
         // 读取缓存的顶部导航栏
         this.navBar.active = r.top;
         // 读取缓存的侧边导航栏

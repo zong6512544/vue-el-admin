@@ -2,7 +2,7 @@
  * @Author: zongbao.yao
  * @Date: 2020-07-30 13:11:38
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-08-02 02:34:54
+ * @LastEditTime: 2020-08-02 03:05:52
  * @Description: 
  * 
  * 一、例如：index/index、shop/index以index结尾的，path和name默认去除index
@@ -78,7 +78,6 @@ let routes = [{
 let getRoutes = function () {
     // 自动生成路由
     createRoute(routes)
-    console.log(routes)
     return routes;
 }
 

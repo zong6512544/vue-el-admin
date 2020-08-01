@@ -2,7 +2,7 @@
  * @Author: zongbao.yao
  * @Date: 2020-07-30 08:36:27
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-08-02 01:38:14
+ * @LastEditTime: 2020-08-02 03:10:30
  * @Description: 
  */ 
 import Vue from 'vue'
@@ -13,6 +13,9 @@ Vue.config.productionTip = false
 
 // 引入路由
 import router from './router/router'
+
+// 引入全年局bootstrap4样式
+import './assets/css/bootstrap.min.css'
 
 // 引入全局配置文件
 import $conf from './common/config/config.js'
