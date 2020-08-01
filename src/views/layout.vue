@@ -2,7 +2,7 @@
  * @Author: zongbao.yao
  * @Date: 2020-07-30 12:50:13
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-08-02 01:42:51
+ * @LastEditTime: 2020-08-02 02:52:36
  * @Description: 
 --> 
 <template>
@@ -56,7 +56,7 @@
         <!-- 侧边栏aside -->
         <el-aside width="200px">
           <!-- el-menu -->
-          <el-menu default-active="0" @select="slideSelect">
+          <el-menu :default-active="slideMenuActive" @select="slideSelect" class="el-menu-aside">
             <el-menu-item
               :index="index | numToString"
               v-for="(item,index) in slideMenus"
@@ -83,12 +83,21 @@
         </el-aside>
         <!-- 主布局main -->
         <el-main>
-          <li v-for="i in 100" :key="i">{{i}}</li>
+          <!-- 面包屑导航栏 -->
+          <div class="border-bottom mb-3 bread-crumb" v-if="bread.length>0">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+              <el-breadcrumb-item
+                v-for="(item,index) in bread"
+                :key="index"
+                :to="{ path: item.path }"
+              >{{item.title}}</el-breadcrumb-item>
+            </el-breadcrumb>
+          </div>
+          <!-- 路由出口 -->
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
-    <!-- 路由出口 -->
-    <!-- <router-view></router-view> -->
   </div>
 </template>
 
@@ -153,6 +162,9 @@ export default {
       //       { name: "设置" },
       //     ],
       //   },
+
+      // 面包屑导航数组
+      bread: [],
     };
   },
 
@@ -164,12 +176,12 @@ export default {
     // 侧边栏选中状态
     // case01:
     // slideMenuActive() {
-    //   return this.navBar.list[this.navBar.active].subActive || 0;
+    //   return this.navBar.list[this.navBar.active].subActive || '0';
     // },
     // case02:优化
     slideMenuActive: {
       get() {
-        return this.navBar.list[this.navBar.active].subActive || 0;
+        return this.navBar.list[this.navBar.active].subActive || "0";
       },
       set(val) {
         this.navBar.list[this.navBar.active].subActive = val;
@@ -177,11 +189,30 @@ export default {
     },
   },
 
-  watch: {},
+  watch: {
+    // 监听路由
+    "$route"(to, from) {
+      // 本地存储
+      localStorage.setItem(
+        "navActive",
+        JSON.stringify({
+          // 顶部menu选中index
+          top: this.navBar.active || "0",
+          // 侧边menu选中index
+          left: this.slideMenuActive || "0",
+        })
+      );
+      this.getRouterBread();
+    },
+  },
 
-  created(){
+  created() {
     // 初始化菜单栏配置，从全局配置读取
-    this.navBar = this.$conf.navBar
+    this.navBar = this.$conf.navBar;
+    // 获取面包屑导航
+    this.getRouterBread();
+    // 页面刷新,读取菜单栏信息(top+left)
+    this.__initNavBar();
   },
 
   mounted() {},
@@ -189,8 +220,16 @@ export default {
   methods: {
     // el-menu选中触发事件
     handleSelect(key, keyPath) {
-      console.log(key, keyPath);
       this.navBar.active = key;
+      // 初始化侧边导航栏
+      this.slideMenuActive = "0";
+      //
+      if (this.slideMenus.length > 0) {
+        // 面包屑处理，默认选中跳转到当前激活菜单
+        this.$router.push({
+          name: this.slideMenus[this.slideMenuActive].pathname,
+        });
+      }
     },
     // el-menu侧边栏
     slideSelect(index, indexPath) {
@@ -201,6 +240,41 @@ export default {
 
       // case02:优化
       this.slideMenuActive = index;
+
+      // 跳转侧边栏指定路由页面
+      console.log(this.slideMenus[index].pathname);
+      this.$router.push({ name: this.slideMenus[index].pathname });
+    },
+    // 获取面包屑导航
+    getRouterBread() {
+      console.log("router", this.$route);
+      let b = this.$route.matched.filter((item) => item.name);
+      let arr = [];
+      b.forEach((item, index) => {
+        // 过滤layout和index
+        if (item.name === "index" || item.name === "layout") return;
+        arr.push({
+          name: item.name,
+          path: item.path,
+          title: item.meta.title,
+        });
+      });
+      if (arr.length > 0) {
+        arr.unshift({ name: "index", path: "/index", title: "后台首页" });
+      }
+      this.bread = arr;
+    },
+    // 页面刷新，初始化菜单栏
+    __initNavBar() {
+      let r = localStorage.getItem("navActive");
+      if (r) {
+        r = JSON.parse(r);
+        console.log(r);
+        // 读取缓存的顶部导航栏
+        this.navBar.active = r.top;
+        // 读取缓存的侧边导航栏
+        this.slideMenuActive = r.left;
+      }
     },
   },
 };
@@ -226,6 +300,17 @@ export default {
   .inner-container {
     height: 100%;
     padding-bottom: 60px;
+  }
+
+  // 侧边栏
+  .el-menu-aside {
+    height: 100%;
+  }
+
+  // main中面包屑bread-crumb
+  .bread-crumb {
+    padding: 20px;
+    margin: -20px;
   }
 }
 </style>

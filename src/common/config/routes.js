@@ -2,7 +2,7 @@
  * @Author: zongbao.yao
  * @Date: 2020-07-30 13:11:38
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-08-01 20:30:34
+ * @LastEditTime: 2020-08-02 02:34:54
  * @Description: 
  * 
  * 一、例如：index/index、shop/index以index结尾的，path和name默认去除index
@@ -34,14 +34,22 @@ let routes = [{
             // PS:路由懒加载
             // component: () => import('../../views/index.vue')
             // PS:路由二次封装，省略上述写法
-            component: 'index/index'
+            component: 'index/index',
+            // 
+            meta: {
+                title: '后台首页'
+            }
         }, {
             // PS:路由二次封装，自动生成
             // path: '/shop/goods/list',
             // name: 'shop_goods_list',
 
             // PS:路由二次封装，省略上述写法
-            component: 'shop/goods/list'
+            component: 'shop/goods/list',
+            // 
+            meta: {
+                title: '商品列表'
+            }
         }]
     },
     // 登录
@@ -51,7 +59,11 @@ let routes = [{
         // name: 'login',
 
         // PS:路由二次封装，省略上述写法
-        component: 'login/index'
+        component: 'login/index',
+        // 
+        meta: {
+            title: '登录首页'
+        }
     },
     // 404 或 * 所有未匹配路由===>>>均跳转到路由name:index路径
     {

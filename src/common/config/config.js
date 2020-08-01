@@ -2,7 +2,7 @@
  * @Author: zongbao.yao
  * @Date: 2020-08-02 01:36:21
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-08-02 01:41:21
+ * @LastEditTime: 2020-08-02 02:19:40
  * @Description: 全局配置信息
  */
 
@@ -19,10 +19,12 @@ export default {
         subMenu: [{
             icon: "el-icon-s-home",
             name: "后台首页",
+            pathname: 'index'
           },
           {
             icon: "el-icon-s-claim",
             name: "商品列表",
+            pathname: 'shop_goods_list'
           }
         ],
       },
@@ -34,7 +36,8 @@ export default {
         subMenu: [{
           icon: "el-icon-s-claim",
           name: "商品列表",
-        }, ],
+          pathname: 'shop_goods_list'
+        }],
       },
       {
         name: "订单"
