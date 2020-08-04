@@ -2,7 +2,7 @@
  * @Author: zongbao.yao
  * @Date: 2020-07-30 12:50:13
  * @LastEditors: zongbao.yao
- * @LastEditTime: 2020-08-02 03:46:38
+ * @LastEditTime: 2020-08-04 22:43:33
  * @Description: 
 --> 
 <template>
@@ -82,9 +82,9 @@
           </el-menu>
         </el-aside>
         <!-- 主布局main -->
-        <el-main>
+        <el-main class="bg-light">
           <!-- 面包屑导航栏 -->
-          <div class="border-bottom mb-3 bread-crumb" v-if="bread.length>0">
+          <div class="border-bottom mb-3 bread-crumb bg-white" v-if="bread.length>0">
             <el-breadcrumb separator-class="el-icon-arrow-right">
               <el-breadcrumb-item
                 v-for="(item,index) in bread"
@@ -95,6 +95,12 @@
           </div>
           <!-- 路由出口 -->
           <router-view></router-view>
+          <!-- el-回到顶部按钮 -->
+          <template>
+            <el-backtop target=".el-main" :bottom="100">
+              <div class="back-to-top">UP</div>
+            </el-backtop>
+          </template>
         </el-main>
       </el-container>
     </el-container>
@@ -312,6 +318,17 @@ export default {
   .bread-crumb {
     padding: 20px;
     margin: -20px;
+  }
+
+  // 回到顶部
+  .back-to-top {
+    height: 100%;
+    width: 100%;
+    background-color: #f2f5f6;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+    text-align: center;
+    line-height: 40px;
+    color: #1989fa;
   }
 }
 </style>
